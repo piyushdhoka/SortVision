@@ -222,6 +222,27 @@ const SortingVisualizer = ({ initialAlgorithm = 'bubble', activeTab = 'controls'
     setStep(currentBar);
   }, [currentBar]);
 
+  //=============================================================================
+  // KEYBOARD SHORTCUTS (SPACEBAR FOR PLAY/PAUSE)
+  //=============================================================================
+
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      // Only trigger if not focused on input/textarea/button
+      const tag = document.activeElement.tagName.toLowerCase();
+      if (tag === 'input' || tag === 'textarea' || tag === 'button') return;
+      if (e.code === 'Space' || e.key === ' ') {
+        e.preventDefault();
+        if (isSorting) {
+          stopSorting();
+        } else {
+          startSorting();
+        }
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isSorting, startSorting, stopSorting]);
 
   //=============================================================================
   // COMPONENT RENDERING
